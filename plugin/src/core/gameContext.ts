@@ -1,4 +1,4 @@
-import Feature from "./feature";
+import Feature from "@/core/feature";
 import { log } from "@/utils/consoleLogger";
 
 export default class GameContext {

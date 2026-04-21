@@ -8,21 +8,17 @@
  * Если плагин не использует ESP-файлы, удалите этот файл.
  */
 import Mod from "@/core/mod";
+// import { Spell } from "skyrimPlatform"; // раскомментируйте нужные типы
 
 export default class EspNameMod extends Mod {
-  constructor() {
+  public constructor() {
     super("EspName.esp");
   }
 
-  // Различные сущности из подгружаемого файла .esp
-  // Пример получения сущности (на примере заклинания)
-  // _exampleSpellEditorId: Spell.from(this.GetFormFromFormId("000000")!);
-  // Значение "000000" нужно заменить на реальный FormId.
-  // Важно, что FormId должен указываться без первых двух знаков справа. Они подставляются автоматически.
-  public get Spells() {
-    return {};
-  }
-  public get Globals() {
-    return {};
-  }
+  // Пример геттера (FormId без первых двух знаков слева — индекс мода):
+  // public get Spells() {
+  //   return {
+  //     exampleSpell: Spell.from(this.GetFormFromFormId("000000")),
+  //   };
+  // }
 }

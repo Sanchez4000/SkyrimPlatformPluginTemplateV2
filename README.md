@@ -69,7 +69,8 @@ plugin/
 │   ├── core/               ← ядро фреймворка, не изменять
 │   │   ├── feature.ts      ← базовый класс Feature
 │   │   ├── gameContext.ts  ← менеджер фич
-│   │   └── mod.ts          ← базовый класс для работы с ESP
+│   │   ├── mod.ts          ← базовый класс для работы с ESP
+│   │   └── plugin.ts       ← жизненный цикл плагина
 │   │
 │   ├── features/           ← здесь создаются фичи плагина
 │   │   └── example/
@@ -88,7 +89,7 @@ plugin/
 │   ├── utils/
 │   │   └── consoleLogger.ts  ← логгер, не изменять
 │   │
-│   └── index.ts            ← точка входа: регистрация фич
+│   └── index.ts            ← точка входа: вызов startPlugin с регистрацией фич
 │
 ├── package.json             ← имя выходного файла плагина (поле "name")
 ├── skyrim.example.json     ← шаблон конфига пути к Skyrim
@@ -113,7 +114,7 @@ plugin/
 
 | Путь | Причина |
 |---|---|
-| `src/core/` | Ядро фреймворка — управляет жизненным циклом фич и событий |
+| `src/core/` | Ядро фреймворка — управляет жизненным циклом плагина и фич |
 | `src/utils/consoleLogger.ts` | Логгер, настроенный под метаданные плагина |
 | `tsconfig.json` | Компилятор настроен под требования Skyrim Platform |
 | `webpack.config.js` | Сборщик настроен под нужды Skyrim Platform |
@@ -180,7 +181,8 @@ src/features/
 ```ts
 // src/features/regen/healthRegenFeature.ts
 import Feature from "@/core/feature";
-import { Actor, Game, on } from "skyrimPlatform";
+import { log } from "@/utils/consoleLogger";
+import { Game, on } from "skyrimPlatform";
 
 export default class HealthRegenFeature extends Feature {
   private _frameDivider: number = 60; // каждые 60 кадров (~1 сек при 60 fps)
@@ -214,18 +216,20 @@ export default class HealthRegenFeature extends Feature {
 
 ### Шаг 3 — Зарегистрировать фичу
 
-Добавьте фичу в функцию `init()` в [plugin/src/index.ts](plugin/src/index.ts):
+Добавьте фичу в [plugin/src/index.ts](plugin/src/index.ts):
 
 ```ts
-import HealthRegenFeature from "./features/regen/healthRegenFeature";
+import { startPlugin } from "@/core/plugin";
+import ExampleFeature from "@/features/example/exampleFeature";
+import HealthRegenFeature from "@/features/regen/healthRegenFeature"; // ← добавить
 
-function init(): void {
+startPlugin((context) => {
   context.EnableFeature(new ExampleFeature());
   context.EnableFeature(new HealthRegenFeature()); // ← добавить
-}
+});
 ```
 
-`init()` вызывается при загрузке сохранения и при старте новой игры. `GameContext` автоматически предотвращает регистрацию двух фич с одинаковым именем класса.
+Колбэк вызывается при загрузке сохранения и при старте новой игры. `GameContext` автоматически предотвращает регистрацию двух фич с одинаковым именем класса.
 
 ---
 
@@ -273,7 +277,7 @@ import MyMod from "@/ref/esp/myMod";
 import { Game, on } from "skyrimPlatform";
 
 export default class MyFeature extends Feature {
-  private _mod: MyMod;
+  private _mod!: MyMod;
 
   public Enable(): void {
     this._mod = new MyMod();
