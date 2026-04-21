@@ -1,0 +1,1 @@
+# SkyrimPlatformPluginTemplateV2
