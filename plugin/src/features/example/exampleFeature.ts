@@ -1,14 +1,9 @@
 import Feature from "@/core/feature";
-import GameContext from "@/core/gameContext";
 import { Game, on } from "skyrimPlatform";
 
 export default class ExampleFeature extends Feature {
   private _frameDivider: number = 30;
   private _frameCounter: number = 0;
-
-  constructor(gameContext: GameContext) {
-    super(gameContext);
-  }
 
   public Enable(): void {
     this._gameContext.SafeSubscribe(
