@@ -17,7 +17,7 @@ export default class ExampleFeature extends Feature {
     this._gameContext.Unsubscribe("ExampleFeature_Update");
   }
 
-  public Update(): void {
+  private Update(): void {
     this._frameCounter++;
     if (this._frameCounter >= this._frameDivider) {
       this._frameCounter = 0;
