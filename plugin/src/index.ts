@@ -1,5 +1,5 @@
 import { on, once, printConsole } from "skyrimPlatform";
-import PluginData from "@/meta/modData";
+import PluginData from "@/meta/pluginData";
 import { log } from "./utils/consoleLogger";
 import GameContext from "./core/gameContext";
 import ExampleFeature from "./features/example/exampleFeature";

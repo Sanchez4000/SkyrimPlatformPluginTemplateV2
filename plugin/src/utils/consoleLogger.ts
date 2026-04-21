@@ -1,4 +1,4 @@
-import PluginData from "@/meta/modData";
+import PluginData from "@/meta/pluginData";
 import { printConsole } from "skyrimPlatform";
 
 export function log(message: string): void {
