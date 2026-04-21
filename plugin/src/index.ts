@@ -26,5 +26,5 @@ on("loadGame", () => {
 });
 
 function init(): void {
-  context.EnableFeature(new ExampleFeature(context));
+  context.EnableFeature(new ExampleFeature());
 }

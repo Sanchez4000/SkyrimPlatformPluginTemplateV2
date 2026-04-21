@@ -1,34 +1,26 @@
-import { EventHandle } from "skyrimPlatform";
-import GameContext from "./gameContext";
+import { EventHandle, unsubscribe } from "skyrimPlatform";
 
 export default abstract class Feature {
   public readonly Name: string;
 
-  protected readonly _gameContext: GameContext;
-  private readonly _ownedEvents: string[] = [];
-  private _subscriptionCounter: number = 0;
+  private readonly _ownedEvents: EventHandle[] = [];
 
-  public constructor(gameContext: GameContext) {
-    this._gameContext = gameContext;
+  public constructor() {
     this.Name = this.constructor.name;
   }
 
-  protected Subscribe(event: EventHandle): string {
-    const name = `${this.Name}_${this._subscriptionCounter++}`;
-    this._gameContext.SafeSubscribe(event, name);
-    this._ownedEvents.push(name);
-    return name;
+  protected Subscribe(event: EventHandle): void {
+    this._ownedEvents.push(event);
   }
 
   public abstract Enable(): void;
 
   public Disable(): void {
-    this.OnDisable();
-    for (const name of this._ownedEvents) {
-      this._gameContext.Unsubscribe(name);
+    for (const event of this._ownedEvents) {
+      unsubscribe(event);
     }
     this._ownedEvents.length = 0;
-    this._subscriptionCounter = 0;
+    this.OnDisable();
   }
 
   protected OnDisable(): void {}
