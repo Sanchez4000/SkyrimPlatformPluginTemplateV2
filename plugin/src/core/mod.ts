@@ -4,11 +4,11 @@ import { Form, Game } from "skyrimPlatform";
 export default abstract class Mod {
   private static readonly MOD_NOT_FOUND_INDEX = 0xff;
 
-  private readonly ModPrefix: string;
-  private readonly ModName: string;
+  private readonly _modPrefix: string;
+  private readonly _modName: string;
 
   public get Name(): string {
-    return this.ModName;
+    return this._modName;
   }
 
   public constructor(name: string) {
@@ -19,13 +19,13 @@ export default abstract class Mod {
       throw new Error(message);
     }
 
-    this.ModName = name;
+    this._modName = name;
     const hexIndex = modIndex.toString(16).padStart(2, "0");
-    this.ModPrefix = `0x${hexIndex}`;
+    this._modPrefix = `0x${hexIndex}`;
   }
 
   protected GetFormFromFormId(hexId: string): Form | null {
-    const hexSpellId = `${this.ModPrefix}${hexId}`;
+    const hexSpellId = `${this._modPrefix}${hexId}`;
     const numericSpellId = parseInt(hexSpellId, 16);
     return Game.getFormEx(numericSpellId);
   }
