@@ -11,12 +11,10 @@ export default class GameContext {
     }
   }
 
-  public EnableFeature<T extends Feature>(instance: T): void {
-    for (let i = 0; i < this._features.length; i++) {
-      if (this._features[i].Name === instance.Name) {
-        log(`Feature ${instance.Name} already enabled`);
-        return;
-      }
+  public EnableFeature(instance: Feature): void {
+    if (this._features.some((f) => f.Name === instance.Name)) {
+      log(`Feature ${instance.Name} already enabled`);
+      return;
     }
 
     try {
