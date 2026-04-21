@@ -34,3 +34,6 @@ desktop.ini
 # Environment
 .env
 .env.local
+
+# Skyrim path config (personal, not for version control)
+plugin/skyrim.json

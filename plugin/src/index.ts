@@ -26,5 +26,6 @@ on("loadGame", () => {
 });
 
 function init(): void {
+  // ПРИМЕР: удалите эту строку и добавьте свои фичи
   context.EnableFeature(new ExampleFeature());
 }

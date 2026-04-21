@@ -34,7 +34,7 @@ export default class PluginData {
 }
 ```
 
-**2. Указать путь к Skyrim** в [plugin/skyrim.json](plugin/skyrim.json):
+**2. Указать путь к Skyrim.** Скопируйте [plugin/skyrim.example.json](plugin/skyrim.example.json) в `plugin/skyrim.json` и укажите свой путь:
 
 ```json
 {
@@ -42,7 +42,13 @@ export default class PluginData {
 }
 ```
 
-Вместо `skyrim.json` можно задать переменную окружения `SKYRIMPATH`.
+`skyrim.json` добавлен в `.gitignore` — личный путь не попадёт в репозиторий.
+
+Альтернатива — передать путь прямо в команде сборки (файл `skyrim.json` при этом не нужен):
+
+```cmd
+set SKYRIMPATH=C:\SteamLibrary\steamapps\common\Skyrim Special Edition && npm run dev
+```
 
 **3. Запустить режим разработки:**
 
@@ -84,8 +90,9 @@ plugin/
 │   │
 │   └── index.ts            ← точка входа: регистрация фич
 │
-├── package.json            ← имя выходного файла плагина (поле "name")
-├── skyrim.json             ← путь к папке Skyrim
+├── package.json             ← имя выходного файла плагина (поле "name")
+├── skyrim.example.json     ← шаблон конфига пути к Skyrim
+├── skyrim.json             ← личный конфиг пути (в .gitignore, создать самостоятельно)
 ├── tsconfig.json           ← не изменять
 └── webpack.config.js       ← не изменять
 ```
@@ -100,7 +107,7 @@ plugin/
 | `src/ref/esp/` | Классы доступа к формам из ESP-файлов |
 | `src/skyrim/` | Константы и перечисления для игровых данных |
 | `package.json` (поле `"name"`) | Имя выходного `.js`-файла плагина |
-| `skyrim.json` | Путь к папке Skyrim для авторазвёртывания |
+| `skyrim.json` | Путь к папке Skyrim (скопировать из `skyrim.example.json`) |
 
 ### Что не трогать
 
