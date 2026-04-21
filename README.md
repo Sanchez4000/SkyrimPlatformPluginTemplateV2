@@ -24,7 +24,7 @@
 
 ## Начало работы
 
-**1. Настроить метаданные плагина** в [plugin/src/meta/modData.ts](plugin/src/meta/modData.ts):
+**1. Настроить метаданные плагина** в [plugin/src/meta/pluginData.ts](plugin/src/meta/pluginData.ts):
 
 ```ts
 export default class PluginData {
@@ -76,7 +76,7 @@ plugin/
 │   │       └── exampleFeature.ts
 │   │
 │   ├── meta/
-│   │   └── modData.ts      ← название, версия, автор плагина
+│   │   └── pluginData.ts   ← название, версия, автор плагина
 │   │
 │   ├── ref/
 │   │   └── esp/            ← классы для доступа к формам из ESP-файлов
@@ -101,7 +101,7 @@ plugin/
 
 | Путь | Когда изменять |
 |---|---|
-| `src/meta/modData.ts` | Название, версия, автор плагина |
+| `src/meta/pluginData.ts` | Название, версия, автор плагина |
 | `src/index.ts` | Регистрация новых фич через `context.EnableFeature(...)` |
 | `src/features/` | Вся игровая логика — здесь создаются новые фичи |
 | `src/ref/esp/` | Классы доступа к формам из ESP-файлов |
