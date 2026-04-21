@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# TypeScript
+*.tsbuildinfo
+
+# Logs
+*.log
+npm-debug.log*
+
+# Archives
+*.zip
+*.7z
+*.tgz
+*.rar
+
+# Skyrim Platform / Papyrus
+*.pex
+*.pas
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Environment
+.env
+.env.local
