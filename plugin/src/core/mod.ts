@@ -24,7 +24,7 @@ export default abstract class Mod {
     this.ModPrefix = `0x${hexIndex}`;
   }
 
-  protected FormFromId(hexId: string): Form | null {
+  protected GetFormFromFormId(hexId: string): Form | null {
     const hexSpellId = `${this.ModPrefix}${hexId}`;
     const numericSpellId = parseInt(hexSpellId, 16);
     return Game.getFormEx(numericSpellId);

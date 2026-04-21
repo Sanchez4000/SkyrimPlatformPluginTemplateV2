@@ -25,6 +25,7 @@ export default class GameContext {
     if (existed !== undefined) {
       log(`Event with name ${name} already exist`);
       unsubscribe(event);
+      return;
     }
 
     this._events.push({
@@ -72,6 +73,6 @@ export default class GameContext {
   public DisableFeature(feature: Feature): void {
     this._features = this._features.filter((f) => f !== feature);
     feature.Disable();
-    log(`Feature ${typeof feature} disabled`);
+    log(`Feature ${feature.Name} disabled`);
   }
 }

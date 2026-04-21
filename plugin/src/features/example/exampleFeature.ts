@@ -1,10 +1,8 @@
 import Feature from "@/core/feature";
 import GameContext from "@/core/gameContext";
-import { Game, on, Spell } from "skyrimPlatform";
+import { Game, on } from "skyrimPlatform";
 
 export default class ExampleFeature extends Feature {
-  public Name: string = "ExampleFeature";
-
   private _frameDivider: number = 30;
   private _frameCounter: number = 0;
 
