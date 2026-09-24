@@ -11,6 +11,7 @@
 - [Создание фичи](#создание-фичи)
 - [Работа с ESP-файлами](#работа-с-esp-файлами)
 - [Перечисления игры](#перечисления-игры)
+- [Обёртки над Papyrus-скриптами](#обёртки-над-papyrus-скриптами)
 - [Команды сборки](#команды-сборки)
 
 ---
@@ -84,8 +85,15 @@ plugin/
 │   │   └── esp/            ← классы для доступа к формам из ESP-файлов
 │   │       └── espName.ts
 │   │
-│   ├── skyrim/             ← константы и перечисления игры
-│   │   └── trackedStat.enum.ts
+│   ├── skyrim/             ← данные игры и обёртки над её API
+│   │   ├── abstractions/
+│   │   │   └── papyrusScript.ts  ← базовый класс обёрток над Papyrus-скриптами
+│   │   ├── enums/          ← перечисления игры
+│   │   ├── ui/
+│   │   │   ├── levelMeter.ts     ← полоска опыта уровня
+│   │   │   └── uiCallback.ts     ← вызов ActionScript-функций меню
+│   │   ├── uiProvider.ts   ← точка доступа к элементам интерфейса
+│   │   └── wornObject.ts   ← обёртка над SKSE-скриптом WornObject
 │   │
 │   ├── utils/
 │   │   └── consoleLogger.ts  ← логгер, не изменять
@@ -107,7 +115,7 @@ plugin/
 | `src/index.ts` | Регистрация новых фич через `context.EnableFeature(...)` |
 | `src/features/` | Вся игровая логика — здесь создаются новые фичи |
 | `src/ref/esp/` | Классы доступа к формам из ESP-файлов |
-| `src/skyrim/` | Константы и перечисления для игровых данных |
+| `src/skyrim/` | Перечисления игры, обёртки над Papyrus-скриптами и интерфейсом |
 | `package.json` (поле `"name"`) | Имя выходного `.js`-файла плагина |
 | `skyrim.json` | Путь к папке Skyrim (скопировать из `skyrim.example.json`) |
 
@@ -133,6 +141,7 @@ plugin/
 | Классы | `PascalCase` | `ExampleFeature`, `GameContext` |
 | Публичные методы | `PascalCase` | `Enable()`, `GetFormFromFormId()` |
 | Приватные поля | `_camelCase` | `_frameDivider`, `_frameCounter` |
+| Константы (значения примитивных типов) | `UPPER_SNAKE_CASE` | `PLUGIN_NAME`, `HUD_MENU` |
 | Публичные свойства (get) | `PascalCase` | `get Name()`, `get Spells()` |
 | Локальные переменные | `camelCase` | `modIndex`, `hexId` |
 | Файлы классов | `camelCase` | `exampleFeature.ts`, `gameContext.ts` |
@@ -296,11 +305,40 @@ export default class MyFeature extends Feature {
 
 ## Перечисления игры
 
-В папке `src/skyrim/` хранятся константы и перечисления для работы с игровыми данными.
+В папке `src/skyrim/enums/` хранятся перечисления для работы с игровыми данными.
 
-### TrackedStat
+| Перечисление | Назначение |
+|---|---|
+| [TrackedStat](plugin/src/skyrim/enums/trackedStat.enum.ts) | Идентификаторы статистики игрока |
+| [AnimationVariableBool](plugin/src/skyrim/enums/animationVariableBool.enum.ts), [Int](plugin/src/skyrim/enums/animationVariableInt.enum.ts), [Float](plugin/src/skyrim/enums/animationVariableFloat.enum.ts) | Имена анимационных переменных |
+| [HandSlot](plugin/src/skyrim/enums/handSlot.enum.ts) | Слот руки |
+| [SlotMask](plugin/src/skyrim/enums/slotMask.enum.ts) | Маски слотов экипировки |
+| [QuestNotificationType](plugin/src/skyrim/enums/questNotificationType.enum.ts) | Типы уведомлений HUD |
 
-`TrackedStat` ([trackedStat.enum.ts](plugin/src/skyrim/trackedStat.enum.ts)) — перечисление идентификаторов статистики игрока.
+---
+
+## Обёртки над Papyrus-скриптами
+
+Глобальные нативные функции Papyrus-скриптов, в том числе скриптов SKSE, вызываются через наследников `PapyrusScript` ([papyrusScript.ts](plugin/src/skyrim/abstractions/papyrusScript.ts)).
+
+Наследник передаёт имя скрипта в конструктор базового класса и вызывает функции через `CallGlobal()`:
+
+```ts
+import PapyrusScript from "@/skyrim/abstractions/papyrusScript";
+import { HandSlot } from "@/skyrim/enums/handSlot.enum";
+import { SlotMask } from "@/skyrim/enums/slotMask.enum";
+import { Actor } from "skyrimPlatform";
+
+export default class WornObject extends PapyrusScript {
+  public constructor() {
+    super("WornObject"); // имя Papyrus-скрипта
+  }
+
+  public GetItemMaxCharge(actor: Actor, handSlot: HandSlot, slotMask: SlotMask): number {
+    return this.CallGlobal("GetItemMaxCharge", actor, handSlot, slotMask) as number;
+  }
+}
+```
 
 ---
 
